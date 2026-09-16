@@ -1,13 +1,15 @@
 format ELF
 public _start
-msg db "Hello, world", 0xA, 0
+msg db "Ivanov", 0xA, "Nikita", 0xA, "Sergeevich", 0xA, 0
+
+
 
 _start:
     ;инициализация регистров для вывода информации на экран
     mov eax, 4
     mov ebx, 1
     mov ecx, msg
-    mov edx, 14
+    mov edx, 28
     int 0x80
     ;инициализация регистров для успешного завершения работы программы
     mov eax, 1

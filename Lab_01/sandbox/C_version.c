@@ -1,6 +1,6 @@
 #include <stdio.h>
 
 int main(){
-    printf("Hello, world\n");
+    printf("Ivanov\nNikita\nSergeevich\n");
     return 0;
 }
