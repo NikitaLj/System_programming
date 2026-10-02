@@ -1,17 +1,41 @@
-format ELF
+format ELF64
 public _start
-msg db "Ivanov", 0xA, "Nikita", 0xA, "Sergeevich", 0xA, 0
+public exit
+public print_symb
 
+section '.data' writable
+    msg db "Ivanov Nikita Sergeevich",0
+    len = $ - msg
+    place db 1
 
-
+section '.text' executable
 _start:
-    ;инициализация регистров для вывода информации на экран
-    mov eax, 4
-    mov ebx, 1
-    mov ecx, msg
-    mov edx, 28
-    int 0x80
-    ;инициализация регистров для успешного завершения работы программы
+    mov rcx, len
+    .iter:
+        mov al, [msg + rcx - 1]
+        push rcx
+        call print_symb
+        mov al, 0xA
+        call print_symb
+        pop rcx
+        dec rcx
+        cmp rcx, 0
+    jne .iter
+    call exit
+    
+
+print_symb:
+        push rax
+        mov eax, 4
+        mov ebx, 1
+        pop rdx
+        mov [place], dl
+        mov ecx, place
+        mov edx, 1
+        int 0x80
+        ret
+
+exit:
     mov eax, 1
     mov ebx, 0
     int 0x80

@@ -3,7 +3,23 @@ public _start
 
 _start:
     mov rsi, [rsp + 16]
-    movzx eax, byte [rsi]
+    call str_to_int
+    mov r12, rax
+
+    mov rsi, [rsp + 24]
+    call str_to_int
+    mov r13, rax
+
+    mov rsi, [rsp + 32]
+    call str_to_int
+    mov r14, rax
+
+    mov rax, r13
+    xor rdx, rdx
+    div r12
+
+    add rax, r14
+    sub rax, r12
 
     call num_to_str
     call print_str
@@ -21,15 +37,12 @@ print_str:
     push rdi
     push rdx
     push rcx
-
     mov rax, rsi
     call len_str
-
     mov rdx, rax
     mov rax, 1
     mov rdi, 1
     syscall
-
     pop rcx
     pop rdx
     pop rdi
@@ -70,7 +83,7 @@ num_to_str:
         dec rdi
         mov [rdi], dl
         inc rcx
-        test eax, eax
+        test rax, rax
         jnz .convert
 
     mov byte [rdi + rcx], 10
@@ -85,5 +98,30 @@ num_to_str:
     ret
 
 
+str_to_int:
+    xor rax, rax
+    mov rbx, 10
+
+    .loop:
+        movzx rcx, byte [rsi]
+        cmp rcx, 0
+        je .done
+        cmp rcx, '0'
+        jl .next
+        cmp rcx, '9'
+        jg .next
+
+        sub rcx, '0'
+        imul rax, rbx
+        add rax, rcx
+
+    .next:
+        inc rsi
+        jmp .loop
+
+    .done:
+        ret
+
+
 section '.bss' writeable
-    buf rb 16
+    buf rb 32

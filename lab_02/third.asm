@@ -29,7 +29,7 @@ _start:
     inc rcx
     inc r8
 
-    cmp r8, rbx
+    cmp r, rbx
     jne .line
 
         push rcx
