@@ -2,7 +2,7 @@ format ELF64
 public _start
 
 _start:
-    mov rsi, [rsp + 16]
+    mov rsi, [rsp+16]
     movzx eax, byte [rsi]
 
     call num_to_str
