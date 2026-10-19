@@ -46,7 +46,6 @@ _start:
     mov rax, r9
     mov rsi, answer
     call number_str
-    mov rsi, answer
     call print_str
     call new_line
     call exit

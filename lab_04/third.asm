@@ -19,15 +19,38 @@ _start:
     jz .done
     xor rdx, rdx
     div rbx
-    imul r8, rbx
     add r8, rdx
     jmp .loop
-
 .done:
     mov rax, r8
     mov rsi, answer
     call number_str
-    mov rsi, answer
+    mov rax, rsi
+    call len_str
+    mov rcx,rax
+    cmp rcx, 1
+    jle .done_reverse
+
+    mov rdi, rsi
+    mov r8, rsi
+    add r8, rcx
+    dec r8
+
+.reverse_loop:
+    cmp rdi, r8
+    jge .done_reverse
+
+    mov al, byte [rdi]
+    mov dl, byte [r8]
+
+    mov byte [rdi], dl
+    mov byte [r8], al
+
+    inc rdi
+    dec r8
+    jmp .reverse_loop
+
+.done_reverse:
     call print_str
     call new_line
     call exit
