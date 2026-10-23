@@ -7,6 +7,7 @@ section '.data' writable
 
 buffer rb 1
 letters db 'BCDFGHJKLMNPQRSTVWXYZbcdfghjklmnpqrstvwxyz'
+letters1 db 'AEYUOI'
 
 section '.text' executable
 
@@ -43,10 +44,33 @@ _start:
 
    call write_buffer
    mov al, [buffer]
-   mov rdi, letters
-   mov rcx, 42
+   cmp al, 'a'
+   jb  .check_vowel
+   cmp al, 'z'
+   ja  .check_vowel
+   sub al, 32
+
+.check_vowel:
+   mov rdi, letters1
+   mov rcx, 12
    repne scasb
-   jne .loop_read
+   je .loop_read
+   mov al, [buffer]
+   cmp al, 'A'
+   jmp .check_lower
+   cmp al, 'Z'
+   jbe .is_letter
+
+.check_lower:
+   cmp al, 'a'
+   jb .not_letter
+   cmp al, 'z'
+   jbe .is_letter
+
+.not_letter:
+   jmp .loop_read     
+
+.is_letter:
    call write_buffer
    jmp .loop_read
 
